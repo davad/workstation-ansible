@@ -1,5 +1,0 @@
-- name: Install Ruby Gem utilities
-  gem: name={{ item }} state=latest
-  sudo: yes
-  with_items:
-    - teamocil

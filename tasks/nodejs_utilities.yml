@@ -1,9 +1,19 @@
 - name: Install Node.js utilities
   npm: name={{ item }} global=yes
-  sudo: yes
+  become: yes
   with_items:
-    - coffee-script
+    - gatsby-cli
+    - gatsby-dev-cli
     - jsonlint
-    - jshint
-    #- jshintreact # Patch jshint so it works with JSX files.
     - js-yaml
+    - eslint
+    - eslint-plugin-flowtype
+    - eslint-config-prettier
+    - eslint-config-google
+    - eslint-plugin-react
+    - prettier
+    - babel-eslint
+    - eslint-plugin-react
+    - yarn
+    - typescript-language-server
+    - eslint_d
