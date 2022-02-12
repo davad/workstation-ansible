@@ -1,3 +1,9 @@
+- name: Ensures ./npm-global directory exists
+  file: path=~/.npm-global state=directory
+
+- name: Configure NPM to install globals in home directory
+  shell: npm config set prefix '~/.npm-global'
+
 - name: Install Node.js utilities
   npm: name={{ item }} global=yes
   become: yes
@@ -17,3 +23,6 @@
     - yarn
     - typescript-language-server
     - eslint_d
+    - n
+    - prisma
+    - lerna

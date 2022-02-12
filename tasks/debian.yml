@@ -1,3 +1,12 @@
+- name: Install Docker GPG key
+  shell: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --batch --yes --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg"
+  become: yes
+
+- name: Install docker engine repo
+  shell: 'echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null'
+
 - name: Update apt-get repo and cache
   apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
   become: yes
@@ -19,6 +28,7 @@
     - automake
     - silversearcher-ag
     - fzf
+    - fd-find
     - ripgrep
     - kitty
     - luajit
@@ -38,12 +48,40 @@
     - unzip 
     - curl 
     - doxygen
+    - docker-ce
+    - docker-ce-cli
+    - containerd.io
+    - libpng-dev # required for some node packages to compile
+    - zsh
+    - ufw
+    - glances # nice top-like tool 
+    - tmux
+
+- name: Ensures ./local/bin directory exists
+  file: path=~/.local/bin state=directory
+
+- name: link fdfind binary to fd
+  shell: "ln -sf $(which fdfind) ~/.local/bin/fd"
+
+- name: Add user to docker group
+  become: yes
+  shell: "groupadd docker && gpasswd -a ${USER} docker && service docker restart && newgrp docker"
+  # This errors on subsquent runs
+  ignore_errors: yes
+
+    # This requires a password so do it manually until want to figure out ansible's way
+# - name: Set zsh as the default shell
+  # shell: 'chsh -s $(which zsh)'
+
+- name: Install ohmyzsh
+  shell: 'sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"'
+  ignore_errors: yes
 
 ##
 # node.js installation (latest stable instead of Ubuntu's out-of-date one)
 #
 - name: Node.js | Run the debian setup.
-  shell: "curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -"
+  shell: "curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -"
   tags: nodejs
   become: yes
 
@@ -54,15 +92,33 @@
   with_items:
     - nodejs
 
-# Install neovim w/ an appimage
-# - name: Install neovim
+# neovim is old in Ubuntu so let's stay on the bleeding edge and compile from source
+- name: Clone neovim
+  git: repo=https://github.com/neovim/neovim.git dest=~/programs/neovim
 
-  # shell: "wget https://github.com/neovim/neovim/releases/download/stable/nvim.appimage -O /opt/nvim.appimage"
-  # become: yes
+- name: make neovim
+  shell:
+    cmd: "make CMAKE_BUILD_TYPE=Release -j4"
+    chdir: ~/programs/neovim
+  ignore_errors: yes
 
-# - name: neovim permissions
-  # shell: "chmod u+x /opt/nvim.appimage"
+- name: install neovim
+  shell:
+    cmd: "make install"
+    chdir: /home/kyle/programs/neovim
+  become: yes
+  ignore_errors: yes
 
 # Ubuntu is on an old version of go that doesn't have `go install` yet
 - name: install efm language server (for neovim)
   shell: "go get github.com/mattn/efm-langserver"
+
+# docker-compose
+- name: Install docker-compose
+  shell: "curl -L https://github.com/docker/compose/releases/download/v2.1.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose && chmod +x /usr/local/bin/docker-compose"
+  become: yes
+
+- name: Add firewall blocking all ports except 22
+  shell: "ufw allow 22 && ufw enable --force enable"
+  become: yes
+  ignore_errors: yes
