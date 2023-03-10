@@ -11,6 +11,7 @@
   tags: install
   become: yes
   with_items:
+    - byobu
     - curl
     - git
     - build-essential
@@ -43,7 +44,7 @@
 # node.js installation (latest stable instead of Ubuntu's out-of-date one)
 #
 - name: Node.js | Run the debian setup.
-  shell: "curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -"
+  shell: "curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -"
   tags: nodejs
   become: yes
 
