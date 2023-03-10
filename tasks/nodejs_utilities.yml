@@ -1,12 +1,6 @@
 - name: Install Node.js utilities
-  community.general.yarn: name={{ item }} global=yes
+  community.general.yarn: name={{ item }}
+    global=yes
   with_items:
-    - gatsby-cli
-    - eslint
-    - eslint-config-prettier
-    - eslint-config-airbnb
-    - eslint-plugin-react
-    - prettier
-    - babel-eslint
-    - typescript-language-server
     - neovim
+    - typescript
