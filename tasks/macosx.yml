@@ -7,6 +7,10 @@
 # - name: Install xQuartz, necessary dependency for several homebrew recipes
   # homebrew_cask: name=xquartz state=present
 
+- name: Tap homebrew repo for resticprofile
+  community.general.homebrew_tap:
+    name: creativeprojects/tap
+
 - name: Update Homebrew and Upgrade all homebrew packages
   homebrew: update_homebrew=yes upgrade_all=yes
 
@@ -16,20 +20,34 @@
   ignore_errors: true
   with_items:
     # - ctags
-    - the_silver_searcher
-    # - tmux
-    - wget
+    - awscli
+    - byobu
+    - ccat
+    - coreutils
+    - fzf
     - git
-    # - go
-    # - ssh-copy-id
-    # - htop-osx
-    # - nmap
+    - go
+    - helm
+    - htop
+    - ipmitool
+    - java
+    - jid
+    - jq
+    - mosh
+    - neovim
+    - node
+    - pyenv
+    - pyenv-virtualenv
+    - rclone
+    - restic
+    - resticprofile
+    - speedtest-cli
+    - terraform
+    - the_silver_searcher
+    - tmux
     - watch
-    # - node
-    # - neovim
-    # - coreutils
-    # - ccat
-    # - fzf
+    - wget
+    - yarn
     # - tig
     # - fish
     # - mas # Install from Mac Store
@@ -47,41 +65,51 @@
   tags: install macosx
   ignore_errors: true
   with_items:
-    # - alfred # Better launcher
-    - adobe-reader
+    - alfred # Better launcher
+    # - adobe-reader
     # - android-file-transfer
+    - authy
+    - aws-vault
+    - bartender
     - discord
+    - docker
     # - dropbox
     # - evernote
     - firefox
     - font-fira-code
     #- flash
     #- flux
-    - gimp
+    #- gimp
     - google-chrome
-    - google-chrome-canary
+    #- google-chrome-canary
+    - google-drive
     #- google-hangouts
     - handbrake
     #- hipchat
     #- heroku-toolbelt
-    - inkscape
-    # - iterm2
+    #- inkscape
+    - iterm2
     - keepassxc
+    - keepingyouawake
     - kindle
     #- lighttable
     #- limechat
     #- lyx
     - meld
-    - ngrok
-    - scapple
-    #- silverlight
+    - nordvpn
+    # - ngrok
+    # - scapple
+    # - silverlight
     # - slack
-    # - spotify
+    - spotify
     # - sublime-text
+    - syncthing
+    - telegram
     # - rstudio # R IDE
     #- vagrant
     - vlc
-    - wireshark
+    - whatsapp
+    # - wireshark
     #- qlcolorcode # This and the following are quicklook plugins
     #- qlstephen
     #- qlmarkdown
@@ -93,7 +121,7 @@
     #- suspicious-package
     #- skitch
     #- skype
-    # - zoom
+    - zoom
 
 #- name: Install mac store apps
 #  command: mas install 668208984 # Giphy Capture

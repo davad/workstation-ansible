@@ -1,2 +1,5 @@
-- name: Install HTTPie
-  pip: name=httpie
+- name: Install Pynvim
+  pip:
+    name:
+      - pynvim
+

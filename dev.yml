@@ -15,13 +15,15 @@
 - hosts: Darwin
   tasks:
     - include: tasks/macosx.yml
-    - include: tasks/dotfiles.yml
-    # - include: tasks/nodejs_utilities.yml
+      #- include: tasks/dotfiles.yml
+    - include: tasks/nodejs_utilities.yml
       #- include: tasks/vim.yml
     - include: tasks/utilities.yml
-    # - include: tasks/python_utilities.yml
+    - include: tasks/python_utilities.yml
 
 - hosts: Debian
+  roles:
+    - deekayen.awscli2
   tasks:
     - include: tasks/dotfiles.yml
     - include: tasks/debian.yml
@@ -31,6 +33,8 @@
     - include: tasks/python_utilities.yml
 
 - hosts: RedHat
+  roles:
+    - deekayen.awscli2
   tasks:
     - include: tasks/redhat.yml
     - include: tasks/dotfiles.yml
