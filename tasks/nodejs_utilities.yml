@@ -1,6 +1,10 @@
+- name: Enable yarn
+  ansible.builtin.shell: corepack enable
+
 - name: Install Node.js utilities
-  community.general.yarn: name={{ item }}
-    global=yes
+  community.general.yarn:
+    name: "{{ item }}"
+    global: true
   with_items:
     - neovim
     - typescript
