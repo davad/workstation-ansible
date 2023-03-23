@@ -15,6 +15,7 @@
   tags: media
   ansible.builtin.apt_repository:
     repo: 'deb [arch=amd64,i386 signed-by=/etc/apt/keyrings/steam.gpg] https://repo.steampowered.com/steam/ stable steam'
+    filename: 'steam'
 
 - name: syncthing | key
   become: yes
@@ -42,11 +43,12 @@
   tags: install
   become: yes
   with_items:
-    - apt-fast
+    # - apt-fast
     - byobu
     - curl
     - git
     - build-essential
+    - flatpak
     - jid
     - jq
     - tmux
@@ -78,16 +80,24 @@
     - doxygen
     - zsh
 
+- name: Add the flathub flatpak repository remote to the user installation
+  become: yes
+  community.general.flatpak_remote:
+    name: flathub
+    state: present
+    flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
+    method: system
+
 - name: install GUI utilities on Debian machines
   tags: workstation-ui
   block:
-    - name: apt
+    - name: install GUI utilities on Debian machines | apt
       apt: pkg={{ item }} state=present
       become: yes
       with_items:
         - vanilla-gnome-desktop
         - syncthing
-    - name: flatpak
+    - name: install GUI utilities on Debian machines | flatpak
       community.general.flatpak:
         name:
           - com.jetbrains.DataGrip
