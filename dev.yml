@@ -24,6 +24,7 @@
   roles:
     - deekayen.awscli2
     - staticdev.brave
+    - darkwizard242.awsvault
   tasks:
     - include: tasks/dotfiles.yml
     - include: tasks/debian.yml
