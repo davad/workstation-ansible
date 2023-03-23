@@ -26,7 +26,9 @@
     - ripgrep
     - kitty
     - luajit
+    - neovim
     - python3
+    - python3-neovim
     - python3-pip
     - golang-go
       # For building nvim
@@ -69,9 +71,13 @@
 
 - name: Clone pyenv
   ansible.builtin.git:
-    repo: 'git@github.com:pyenv/pyenv.git'
+    repo: 'https://github.com/pyenv/pyenv.git'
     dest: ~/.pyenv
 
+- name: Clone pyenv virtualenv
+  ansible.builtin.git:
+    repo: 'https://github.com/pyenv/pyenv-virtualenv.git'
+    dest: ~/.pyenv/plugins/pyenv-virtualenv
 
 - name: Set login shell of user {{ ansible_env.USER }} to `/bin/zsh` with `usermod`
   ansible.builtin.command: usermod --shell /bin/zsh {{ ansible_env.USER }}

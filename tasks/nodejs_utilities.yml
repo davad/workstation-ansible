@@ -1,5 +1,6 @@
 - name: Enable yarn
   ansible.builtin.shell: corepack enable
+  become: yes
 
 - name: Install Node.js utilities
   ansible.builtin.shell: yarn global add {{ item }}

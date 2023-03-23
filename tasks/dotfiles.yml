@@ -24,3 +24,6 @@
     dest: ~/.config/nvim
   tags: dotfile
 
+- name: Install nvim plugins
+  command: nvim -c "PlugInstall" -c ":qa!"
+  register: nvim_install_plugins
