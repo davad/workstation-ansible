@@ -1,3 +1,34 @@
+# - name: apt-fast | repo
+#   become: yes
+#   ansible.builtin.apt_repository:
+#     repo: 'ppa:apt-fast/stable'
+
+- name: steam | key
+  become: yes
+  tags: media
+  ansible.builtin.get_url:
+    url: 'https://repo.steampowered.com/steam/archive/stable/steam.gpg'
+    dest: '/etc/apt/keyrings/steam.gpg'
+
+- name: steam | repo
+  become: yes
+  tags: media
+  ansible.builtin.apt_repository:
+    repo: 'deb [arch=amd64,i386 signed-by=/etc/apt/keyrings/steam.gpg] https://repo.steampowered.com/steam/ stable steam'
+
+- name: syncthing | key
+  become: yes
+  tags: workstation-ui
+  ansible.builtin.get_url:
+    url: 'https://syncthing.net/release-key.gpg'
+    dest: '/etc/apt/keyrings/syncthing.gpg'
+
+- name: syncthing | repo
+  become: yes
+  tags: workstation-ui
+  ansible.builtin.apt_repository:
+    repo: 'deb [arch=amd64 signed-by=/etc/apt/keyrings/syncthing.gpg] https://apt.syncthing.net/ syncthing candidate'
+
 - name: Update apt-get repo and cache
   apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
   become: yes
@@ -11,6 +42,7 @@
   tags: install
   become: yes
   with_items:
+    - apt-fast
     - byobu
     - curl
     - git
@@ -45,6 +77,36 @@
     - curl
     - doxygen
     - zsh
+
+- name: install GUI utilities on Debian machines
+  tags: workstation-ui
+  block:
+    - name: apt
+      apt: pkg={{ item }} state=present
+      become: yes
+      with_items:
+        - vanilla-gnome-desktop
+        - syncthing
+    - name: flatpak
+      community.general.flatpak:
+        name:
+          - com.jetbrains.DataGrip
+
+- name: install GUI extras on Debian machines
+  tags: media
+  block:
+  - name: apt
+    apt: pkg={{ item }} state=present
+    become: yes
+    with_items:
+      - steam
+      - keepassxc
+  - name: flatpak
+    community.general.flatpak:
+      name:
+        - com.plexamp.Plexamp
+        - tv.plex.PlexDesktop
+        - com.jetbrains.DataGrip
 
 ##
 # node.js installation (latest stable instead of Ubuntu's out-of-date one)
