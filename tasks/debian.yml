@@ -21,6 +21,7 @@
     - smem # Tool that does good job of figuring out "real" memory use of processes
     - automake
     - silversearcher-ag
+    - mosh
     - fzf
     - ripgrep
     - kitty
@@ -41,6 +42,7 @@
     - unzip
     - curl
     - doxygen
+    - zsh
 
 ##
 # node.js installation (latest stable instead of Ubuntu's out-of-date one)
@@ -64,3 +66,14 @@
 
 # - name: neovim permissions
 # shell: "chmod u+x /opt/nvim.appimage"
+
+- name: Clone pyenv
+  ansible.builtin.git:
+    repo: 'git@github.com:pyenv/pyenv.git'
+    dest: ~/.pyenv
+
+
+- name: Set login shell of user {{ ansible_env.USER }} to `/bin/zsh` with `usermod`
+  ansible.builtin.command: usermod --shell /bin/zsh {{ ansible_env.USER }}
+  become: true
+  changed_when: false

@@ -11,6 +11,7 @@
     state: link
   tags: dotfile
   loop:
+    - .dir_colors
     - .gitconfig
     - .gitignore_global
     - .latexmkrc

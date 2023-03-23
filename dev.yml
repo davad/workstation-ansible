@@ -23,6 +23,7 @@
 - hosts: Debian
   roles:
     - deekayen.awscli2
+    - staticdev.brave
   tasks:
     - include: tasks/dotfiles.yml
     - include: tasks/debian.yml
