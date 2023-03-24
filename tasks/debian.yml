@@ -89,7 +89,9 @@
     method: system
 
 - name: install GUI utilities on Debian machines
-  tags: workstation-ui
+  tags:
+    - workstation
+    - ui
   block:
     - name: install GUI utilities on Debian machines | apt
       apt: pkg={{ item }} state=present
@@ -98,25 +100,39 @@
         - vanilla-gnome-desktop
         - syncthing
     - name: install GUI utilities on Debian machines | flatpak
+      become: yes
       community.general.flatpak:
+        method: system
         name:
           - com.jetbrains.DataGrip
+          - com.discordapp.Discord
+          - org.telegram.desktop
+          - com.github.tchx84.Flatseal
+          - org.gnome.baobab
+          - org.gnome.Maps
+          - org.gnome.Extensions
 
 - name: install GUI extras on Debian machines
-  tags: media
+  tags:
+    - ui
+    - media
   block:
-  - name: apt
-    apt: pkg={{ item }} state=present
-    become: yes
-    with_items:
-      - steam
-      - keepassxc
-  - name: flatpak
-    community.general.flatpak:
-      name:
-        - com.plexamp.Plexamp
-        - tv.plex.PlexDesktop
-        - com.jetbrains.DataGrip
+    - name: install GUI extras on Debian machines | apt
+      apt: pkg={{ item }} state=present
+      become: yes
+      with_items:
+        - steam-launcher
+        - keepassxc
+    - name: install GUI extras on Debian machines | flatpak
+      become: yes
+      community.general.flatpak:
+        method: system
+        name:
+          - com.plexamp.Plexamp
+          - tv.plex.PlexDesktop
+          - org.gnome.Shotwell
+          - org.libreoffice.LibreOffice
+          - net.lutris.Lutris
 
 ##
 # node.js installation (latest stable instead of Ubuntu's out-of-date one)
