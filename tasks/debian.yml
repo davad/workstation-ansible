@@ -104,7 +104,6 @@
       community.general.flatpak:
         method: system
         name:
-          - com.jetbrains.DataGrip
           - com.discordapp.Discord
           - org.telegram.desktop
           - com.github.tchx84.Flatseal
